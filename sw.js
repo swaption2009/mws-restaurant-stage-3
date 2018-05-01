@@ -1,4 +1,6 @@
-let staticCacheName = 'restaurants-static-v1';
+importScripts('/js/idb.js')
+
+let staticCacheName = 'restaurants-static-v2';
 
 self.addEventListener('install', event => {
   let UrlsToCache = [
@@ -10,6 +12,7 @@ self.addEventListener('install', event => {
     '/css/styles-tablet.css',
     '/css/styles-desktop.css',
     '/js/dbhelper.js',
+    '/js/idb.js',
     '/js/main.js',
     '/js/restaurant_info.js',
     '/img/desktop/1.jpg',
