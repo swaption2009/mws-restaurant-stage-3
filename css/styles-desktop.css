@@ -1,0 +1,20 @@
+ul, li {
+  font-size: 16pt;
+}
+/* ====================== Restaurant Filtering ====================== */
+.filter-options h2 {
+  width: 20%;
+}
+/* ====================== Restaurant Details ====================== */
+.inside #map-container {
+  height: 500px;
+}
+#restaurant-cuisine {
+  font-size: 16pt;
+}
+#restaurant-address {
+  font-size: 16pt;
+}
+#restaurant-hours td {
+  font-size: 14pt;
+}
