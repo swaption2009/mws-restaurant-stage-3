@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f18200" />
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen">
-  <link rel="stylesheet" type="text/css" href="css/styles-tablet.css" media="screen and (min-width:450px)">
+  <link rel="stylesheet" type="text/css" href="css/styles-tablet.css" media="screen and (min-width:400px)">
   <link rel="stylesheet" type="text/css" href="css/styles-desktop.css" media="screen and (min-width:800px)">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="img/icons/shop_512.png"/>
   <title>Restaurant Reviews</title>
 </head>
 
@@ -23,11 +26,15 @@
     </section>
     <section>
       <div class="filter-options">
-        <h2>Filter Results</h2>
-        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" tabindex="1" autofocus>
+        <h2>Filter Results
+        <br />
+        <br />
+        <label for="neighborhoods-select">Select Neighbor: </label>
+        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" autofocus>
           <option value="all">All Neighborhoods</option>
         </select>
-        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" tabindex="2">
+        <label for="cuisines-select">Select Cuisine: </label>
+        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
           <option value="all">All Cuisines</option>
         </select>
       </div>

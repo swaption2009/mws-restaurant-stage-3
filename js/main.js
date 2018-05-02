@@ -4,10 +4,7 @@ let restaurants,
 var map
 var markers = []
 
-// IDB
 const serverUrl = 'http://localhost:1337/restaurants';
-let listRestaurants = []
-let dbPromise
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -17,20 +14,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   fetchNeighborhoods();
   fetchCuisines();
 });
-
-/**
- * Fetch all neighborhoods and set their HTML.
- */
-fetchNeighborhoods = () => {
-  DBHelper.fetchNeighborhoods((error, neighborhoods) => {
-    if (error) { // Got an error
-      console.error(error);
-    } else {
-      self.neighborhoods = neighborhoods;
-      fillNeighborhoodsHTML();
-    }
-  });
-}
 
 /**
  * Create IndexDB
@@ -63,7 +46,19 @@ insertEachTransaction = (restaurant, dbPromise) => {
   console.log('item has been inserted');
 };
 
-
+/**
+ * Fetch all neighborhoods and set their HTML.
+ */
+fetchNeighborhoods = () => {
+  DBHelper.fetchNeighborhoods((error, neighborhoods) => {
+    if (error) { // Got an error
+      console.error(error);
+    } else {
+      self.neighborhoods = neighborhoods;
+      fillNeighborhoodsHTML();
+    }
+  });
+}
 
 /**
  * Set neighborhoods HTML.
@@ -208,7 +203,6 @@ createRestaurantHTML = (restaurant) => {
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
-  more.tabIndex = 3;
   li.append(more);
 
   return li
