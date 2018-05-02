@@ -1,5 +1,3 @@
-importScripts('/js/idb.js')
-
 let staticCacheName = 'restaurants-static-v2';
 
 self.addEventListener('install', event => {

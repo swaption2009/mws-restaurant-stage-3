@@ -4,10 +4,16 @@ let restaurants,
 var map
 var markers = []
 
+// IDB
+const serverUrl = 'http://localhost:1337/restaurants';
+let listRestaurants = []
+let dbPromise
+
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
+  createNewDatabase();
   fetchNeighborhoods();
   fetchCuisines();
 });
@@ -25,6 +31,39 @@ fetchNeighborhoods = () => {
     }
   });
 }
+
+/**
+ * Create IndexDB
+ */
+createNewDatabase = () => {
+  let dbPromise = idb.open('restaurants-db', 1, function(upgradeDb) {
+    if (!upgradeDb.objectStoreNames.contains('restaurants')) {
+      upgradeDb.createObjectStore('restaurants', { keypath: 'id', autoIncrement: true } );
+    }
+    console.log('restaurants-db has been created!');
+  });
+  dbPromise.then(populateDatabase(dbPromise));
+};
+
+populateDatabase = (dbPromise) => {
+  fetch(serverUrl).then(res => res.json())
+                  .then(json => {
+                    json.map(restaurant => insertEachTransaction(restaurant, dbPromise))
+                  });
+};
+
+insertEachTransaction = (restaurant, dbPromise) => {
+  console.log('inserting each item...', restaurant);
+  dbPromise.then(db => {
+    let tx = db.transaction('restaurants', 'readwrite');
+    let store = tx.objectStore('restaurants');
+    store.add(restaurant);
+    return tx.complete
+  });
+  console.log('item has been inserted');
+};
+
+
 
 /**
  * Set neighborhoods HTML.
@@ -196,9 +235,9 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
     navigator.serviceWorker.register('sw.js', {scope: '/'})
       .then(res => {
-        console.log('sw has been registered', res)
+        console.log('sw has been registered')
       }).catch(err => {
-      console.log('sw registration fails', err)
+      console.log('sw registration fails')
     });
   });
 }
