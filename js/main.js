@@ -19,6 +19,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
  * Create IndexDB
  */
 createNewDatabase = () => {
+  // Delete database if exists
+  let DBDeleteRequest = window.indexedDB.deleteDatabase("restaurants-db");
+  DBDeleteRequest.onerror = function(event) {
+    console.log("Error deleting database.");
+  };
+  DBDeleteRequest.onsuccess = function(event) {
+    console.log("Old db successfully deleted!");
+  };
+
+  // Create new database
   let dbPromise = idb.open('restaurants-db', 1, function(upgradeDb) {
     if (!upgradeDb.objectStoreNames.contains('restaurants')) {
       upgradeDb.createObjectStore('restaurants', { keypath: 'id', autoIncrement: true } );
@@ -36,7 +46,7 @@ populateDatabase = (dbPromise) => {
 };
 
 insertEachTransaction = (restaurant, dbPromise) => {
-  console.log('inserting each item...', restaurant);
+  // console.log('inserting each item...', restaurant);
   dbPromise.then(db => {
     let tx = db.transaction('restaurants', 'readwrite');
     let store = tx.objectStore('restaurants');
