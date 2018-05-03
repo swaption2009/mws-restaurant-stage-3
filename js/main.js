@@ -191,9 +191,9 @@ createRestaurantHTML = (restaurant) => {
   const mq_tablet = window.matchMedia("(min-width: 450px)");
   mq_tablet.addListener(mq => {
     if (mq.matches) {
-      return image.src = (`/img/desktop/${restaurant.photograph}`);
+      return image.src = (`/img/desktop/${restaurant.photograph}.jpg`);
     } else {
-      return image.src = (`/img/tablet/${restaurant.photograph}`);
+      return image.src = (`/img/tablet/${restaurant.photograph}.jpg`);
     }
   });
   li.append(image);

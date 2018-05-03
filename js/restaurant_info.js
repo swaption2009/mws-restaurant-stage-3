@@ -65,10 +65,10 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   mq_tablet.addListener(mq => {
     if (mq.matches) {
       console.log("above 450px");
-      return image.src = (`/img/desktop/${restaurant.photograph}`);
+      return image.src = (`/img/desktop/${restaurant.photograph}.jpg`);
     } else {
       console.log('smaller than 450px')
-      return image.src = (`/img/tablet/${restaurant.photograph}`);
+      return image.src = (`/img/tablet/${restaurant.photograph}.jpg`);
     }
   });
 
