@@ -8,21 +8,33 @@ class DBHelper {
    * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
-    const port = 8000 // Change this to your server port
-    return `http://localhost:${port}/data/restaurants.json`;
+    const port = 1337; // Change this to your server port
+    return `http://localhost:${port}/restaurants`;
   }
 
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    let restaurants = [];
-    let dbPromise = idb.open('restaurants-db', 1);
-
-    dbPromise.then(db => {
-        return db.transaction('restaurants')
-          .objectStore('restaurants').getAll();
-      }).then(allItems => { return callback(null, allItems) });
+    // if (navigator.onLine) {
+      console.log('data from xhr');
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', DBHelper.DATABASE_URL);
+      xhr.onload = () => {
+        if (xhr.status === 200) { // Got a success response from server!
+          const json = JSON.parse(xhr.responseText);
+          callback(null, json);
+        } else { // Oops!. Got an error from server.
+          const error = (`Request failed. Returned status of ${xhr.status}`);
+          callback(error, null);
+        }
+      };
+      xhr.send();
+    // } else {
+    //   console.log('data from idb');
+    //   IDBHelper.readAllIdbData(IDBHelper.dbPromise)
+    //     .then(restaurants => { return callback(null, restaurants) });
+    // }
   }
 
   /**

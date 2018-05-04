@@ -7,7 +7,7 @@
   <!-- Normalize.css for better cross-browser consistency -->
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <!-- Main CSS file -->
-  <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen and (max-width:449px)">
+  <link rel="stylesheet" type="text/css" href="css/styles.css" media="screen">
   <link rel="stylesheet" type="text/css" href="css/styles-tablet.css" media="screen and (min-width:450px)">
   <link rel="stylesheet" type="text/css" href="css/styles-desktop.css" media="screen and (min-width:800px)">
   <link rel="manifest" href="/manifest.json">
@@ -37,7 +37,7 @@
   <main id="maincontent" role="main">
     <!-- Beginning map -->
     <section id="map-container">
-      <div id="map"></div>
+      <div id="map" role="application" aria-label="restaurants map"></div>
     </section>
     <!-- End map -->
     <!-- Beginning restaurant -->
@@ -66,6 +66,7 @@
   <!-- Beginning scripts -->
   <!-- idb script -->
   <script type="application/javascript" charset="utf-8" src="js/idb.js"></script>
+  <script type="application/javascript" charset="utf-8" src="js/idbhelper.js"></script>
   <!-- Database helpers -->
   <script type="text/javascript" src="js/dbhelper.js"></script>
   <!-- Main javascript file -->

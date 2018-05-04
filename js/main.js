@@ -1,60 +1,20 @@
 let restaurants,
   neighborhoods,
-  cuisines
-var map
-var markers = []
-
-const serverUrl = 'http://localhost:1337/restaurants';
+  cuisines;
+var map;
+var markers = [];
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
-document.addEventListener('DOMContentLoaded', (event) => {
-  createNewDatabase();
+document.addEventListener('DOMContentLoaded', () => {
+  // TODO IDBHelper move to sw.js
+  IDBHelper.deleteOldDatabase();
+  // IDBHelper.createNewDatabase();
+  // IDBHelper.populateDatabase(IDBHelper.dbPromise);
   fetchNeighborhoods();
   fetchCuisines();
 });
-
-/**
- * Create IndexDB
- */
-createNewDatabase = () => {
-  // Delete database if exists
-  let DBDeleteRequest = window.indexedDB.deleteDatabase("restaurants-db");
-  DBDeleteRequest.onerror = function(event) {
-    console.log("Error deleting database.");
-  };
-  DBDeleteRequest.onsuccess = function(event) {
-    console.log("Old db successfully deleted!");
-  };
-
-  // Create new database
-  let dbPromise = idb.open('restaurants-db', 1, function(upgradeDb) {
-    if (!upgradeDb.objectStoreNames.contains('restaurants')) {
-      upgradeDb.createObjectStore('restaurants', { keypath: 'id', autoIncrement: true } );
-    }
-    console.log('restaurants-db has been created!');
-  });
-  dbPromise.then(populateDatabase(dbPromise));
-};
-
-populateDatabase = (dbPromise) => {
-  fetch(serverUrl).then(res => res.json())
-                  .then(json => {
-                    json.map(restaurant => insertEachTransaction(restaurant, dbPromise))
-                  });
-};
-
-insertEachTransaction = (restaurant, dbPromise) => {
-  // console.log('inserting each item...', restaurant);
-  dbPromise.then(db => {
-    let tx = db.transaction('restaurants', 'readwrite');
-    let store = tx.objectStore('restaurants');
-    store.add(restaurant);
-    return tx.complete
-  });
-  console.log('item has been inserted');
-};
 
 /**
  * Fetch all neighborhoods and set their HTML.

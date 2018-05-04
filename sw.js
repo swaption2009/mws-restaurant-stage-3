@@ -1,4 +1,10 @@
-let staticCacheName = 'restaurants-static-v2';
+importScripts('/js/idb.js');
+importScripts('/js/idbhelper.js');
+importScripts('/js/dbhelper.js');
+
+const staticCacheName = 'restaurants-static-v2';
+
+IDBHelper.createNewDatabase();
 
 self.addEventListener('install', event => {
   let UrlsToCache = [
@@ -9,8 +15,9 @@ self.addEventListener('install', event => {
     '/css/styles.css',
     '/css/styles-tablet.css',
     '/css/styles-desktop.css',
-    '/js/dbhelper.js',
     '/js/idb.js',
+    '/js/idbhelper.js',
+    '/js/dbhelper.js',
     '/js/main.js',
     '/js/restaurant_info.js',
     '/img/desktop/1.jpg',
@@ -67,10 +74,28 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  event.respondWith(
+  if (event.request.url.indexOf(DBHelper.DATABASE_URL) > -1) {
+    event.respondWith(fetch(event.request)
+      .then(res => {
+        let clonedRes = res.clone();
+        clonedRes.json().then(data => {
+          for (let key in data) {
+            IDBHelper.dbPromise
+              .then(db => {
+                let tx = db.transaction('restaurants', 'readwrite');
+                let store = tx.objectStore('restaurants');
+                store.add(data[key]);
+                return tx.complete
+              })
+              .then(console.log('item inserted'))
+          }
+        });
+        return res;
+      }));
+  } else {
     caches.match(event.request, { ignoreSearch: true }).then(response => {
       if (response) return response;
       return fetch(event.request);
     })
-  )
+  }
 });
