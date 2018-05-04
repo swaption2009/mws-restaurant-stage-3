@@ -16,7 +16,11 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    // if (navigator.onLine) {
+    if (navigator.onLine) {
+      // delete old, create new idb and populate data when online
+      IDBHelper.deleteOldDatabase();
+      IDBHelper.createNewDatabase();
+      IDBHelper.populateDatabase(IDBHelper.dbPromise);
       console.log('data from xhr');
       let xhr = new XMLHttpRequest();
       xhr.open('GET', DBHelper.DATABASE_URL);
@@ -30,11 +34,11 @@ class DBHelper {
         }
       };
       xhr.send();
-    // } else {
-    //   console.log('data from idb');
-    //   IDBHelper.readAllIdbData(IDBHelper.dbPromise)
-    //     .then(restaurants => { return callback(null, restaurants) });
-    // }
+    } else {
+      console.log('data from idb');
+      IDBHelper.readAllIdbData(IDBHelper.dbPromise)
+        .then(restaurants => { return callback(null, restaurants) });
+    }
   }
 
   /**

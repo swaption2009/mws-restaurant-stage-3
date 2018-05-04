@@ -1,10 +1,4 @@
-importScripts('/js/idb.js');
-importScripts('/js/idbhelper.js');
-importScripts('/js/dbhelper.js');
-
-const staticCacheName = 'restaurants-static-v2';
-
-IDBHelper.createNewDatabase();
+let staticCacheName = 'restaurants-static-v2';
 
 self.addEventListener('install', event => {
   let UrlsToCache = [
@@ -74,28 +68,10 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  if (event.request.url.indexOf(DBHelper.DATABASE_URL) > -1) {
-    event.respondWith(fetch(event.request)
-      .then(res => {
-        let clonedRes = res.clone();
-        clonedRes.json().then(data => {
-          for (let key in data) {
-            IDBHelper.dbPromise
-              .then(db => {
-                let tx = db.transaction('restaurants', 'readwrite');
-                let store = tx.objectStore('restaurants');
-                store.add(data[key]);
-                return tx.complete
-              })
-              .then(console.log('item inserted'))
-          }
-        });
-        return res;
-      }));
-  } else {
+  event.respondWith(
     caches.match(event.request, { ignoreSearch: true }).then(response => {
       if (response) return response;
       return fetch(event.request);
     })
-  }
+  )
 });

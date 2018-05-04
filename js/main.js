@@ -8,10 +8,6 @@ var markers = [];
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', () => {
-  // TODO IDBHelper move to sw.js
-  IDBHelper.deleteOldDatabase();
-  // IDBHelper.createNewDatabase();
-  // IDBHelper.populateDatabase(IDBHelper.dbPromise);
   fetchNeighborhoods();
   fetchCuisines();
 });
