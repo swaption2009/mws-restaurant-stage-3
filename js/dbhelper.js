@@ -95,18 +95,21 @@ class DBHelper {
   /**
    * Fetch restaurants by a cuisine and a neighborhood with proper error handling.
    */
-  static fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback) {
+  static fetchRestaurantByCuisineAndNeighborhoodAndFavorite(cuisine, neighborhood, favorite, callback) {
     // Fetch all restaurants
     DBHelper.fetchRestaurants((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {
-        let results = restaurants
+        let results = restaurants;
         if (cuisine != 'all') { // filter by cuisine
           results = results.filter(r => r.cuisine_type == cuisine);
         }
         if (neighborhood != 'all') { // filter by neighborhood
           results = results.filter(r => r.neighborhood == neighborhood);
+        }
+        if (favorite === true) { // filter by favorites
+          results = results.filter(r => r.is_favorite == "true");
         }
         callback(null, results);
       }
@@ -160,6 +163,10 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
+    if (!restaurant.hasOwnProperty('photograph')) {
+      restaurant["photograph"] = "10";
+    }
+
     const mq_tablet = window.matchMedia("(min-width: 450px)");
     const mq_desktop = window.matchMedia("(min-width: 800px)");
 

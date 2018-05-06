@@ -1,10 +1,6 @@
 ul, li {
   font-size: 16pt;
 }
-/* ====================== Restaurant Filtering ====================== */
-.filter-options h2 {
-  width: 20%;
-}
 /* ====================== Restaurant Details ====================== */
 .inside #map-container {
   height: 500px;
