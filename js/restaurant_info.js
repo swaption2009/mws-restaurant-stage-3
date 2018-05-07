@@ -88,22 +88,21 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 /**
  * Create restaurant add or remove favorite
  */
-fillRestaurantFavoriteHTML = (is_favorite = self.restaurant.is_favorite) => {
+fillRestaurantFavoriteHTML = (is_favorite = self.restaurant.is_favorite, id = self.restaurant.id) => {
   const favorite = document.getElementById('restaurant-favorite');
-  console.log('fav or not: ' , is_favorite);
 
   let btn = document.createElement('button');
   btn.setAttribute('id', 'button-favorite');
-  // TODO add toggleFavorite() function
 
   if (is_favorite == 'true') {
-    btn.innerHTML = 'Remove from Favorite'
+    btn.innerHTML = 'Remove from Favorite';
+    btn.setAttribute('onclick',`DBHelper.toggleFavorite(${id}, false);`);
   } else {
-    btn.innerHTML = 'Add to Favorite'
+    btn.innerHTML = 'Add to Favorite';
+    btn.setAttribute('onclick',`DBHelper.toggleFavorite(${id}, true);`);
   }
-
   favorite.appendChild(btn);
-}
+};
 
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
