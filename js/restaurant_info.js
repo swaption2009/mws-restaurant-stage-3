@@ -52,6 +52,8 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
 
+  fillRestaurantFavoriteHTML();
+
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
 
@@ -81,6 +83,26 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   }
   // fill reviews
   fillReviewsHTML();
+}
+
+/**
+ * Create restaurant add or remove favorite
+ */
+fillRestaurantFavoriteHTML = (is_favorite = self.restaurant.is_favorite) => {
+  const favorite = document.getElementById('restaurant-favorite');
+  console.log('fav or not: ' , is_favorite);
+
+  let btn = document.createElement('button');
+  btn.setAttribute('id', 'button-favorite');
+  // TODO add toggleFavorite() function
+
+  if (is_favorite == 'true') {
+    btn.innerHTML = 'Remove from Favorite'
+  } else {
+    btn.innerHTML = 'Add to Favorite'
+  }
+
+  favorite.appendChild(btn);
 }
 
 /**

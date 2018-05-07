@@ -12,6 +12,10 @@ ul, li {
 .inside #map-container {
   height: 400px;
 }
+#button-favorite {
+  font-size: 16px;
+  padding: 12px;
+}
 #restaurant-cuisine {
   font-size: 14pt;
 }

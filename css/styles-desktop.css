@@ -5,8 +5,12 @@ ul, li {
 .inside #map-container {
   height: 500px;
 }
+#button-favorite {
+  font-size: 18px;
+}
 #restaurant-cuisine {
   font-size: 16pt;
+  padding: 14px;
 }
 #restaurant-address {
   font-size: 16pt;
