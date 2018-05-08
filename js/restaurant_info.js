@@ -128,13 +128,11 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (reviews = self.restaurant.reviews, restaurant = self.restaurant) => {
+fillReviewsHTML = (reviews = self.restaurant.reviews,) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
-
-  console.log('restaurant reviews.nil?', restaurant);
 
   if (!reviews) {
     const noReviews = document.createElement('p');
@@ -158,9 +156,13 @@ createReviewHTML = (review) => {
   name.innerHTML = review.name;
   li.appendChild(name);
 
-  const date = document.createElement('p');
-  date.innerHTML = review.date;
-  li.appendChild(date);
+  const reviewDate = document.createElement('p');
+  let formattedDate = new Date(review.updatedAt);
+  let date = formattedDate.getDate();
+  let month = formattedDate.getMonth();
+  let year = formattedDate.getFullYear();
+  reviewDate.innerHTML = month + "/" + date + "/" + year;
+  li.appendChild(reviewDate);
 
   const rating = document.createElement('p');
   rating.innerHTML = `Rating: ${review.rating}`;
@@ -181,8 +183,6 @@ buildReviewFormHTML = (id = self.restaurant.id) => {
 
   const createform = document.createElement('form');
   createform.setAttribute('onsubmit', `DBHelper.postReview(event, this);`);
-  // createform.setAttribute('method', 'post');
-
 
   const heading = document.createElement('h2');
   heading.innerHTML = 'Restaurant Review Form ';

@@ -8,8 +8,20 @@ var markers = [];
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', () => {
-  fetchNeighborhoods();
-  fetchCuisines();
+  IDBHelper.databaseExists(dbName='restaurants-db', function (yesno) {
+    if (yesno) {
+      console.log(dbName + " exists? " + yesno);
+    } else {
+      console.log(dbName + " exists? " + yesno);
+      IDBHelper.createNewDatabase();
+      IDBHelper.populateDatabase(IDBHelper.dbPromise);
+    }
+  });
+
+  setTimeout(function() {
+    fetchNeighborhoods();
+    fetchCuisines();
+  }, 3000)
 });
 
 /**

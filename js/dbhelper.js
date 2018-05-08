@@ -33,7 +33,6 @@ class DBHelper {
     }).then(res => console.log('new review has been posted', res.json()))
       .then(location.reload());
   }
-
   /**
    * Add or Remove is_favorite on the server
    */
@@ -42,36 +41,13 @@ class DBHelper {
       .then(res => console.log('restaurant favorite has been updated'))
       .then(location.reload());
   }
-
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    if (navigator.onLine) {
-      // delete old, create new idb and populate data when online
-      IDBHelper.deleteOldDatabase();
-      IDBHelper.createNewDatabase();
-      IDBHelper.populateDatabase(IDBHelper.dbPromise);
-      console.log('data from xhr');
-      let xhr = new XMLHttpRequest();
-      xhr.open('GET', DBHelper.DATABASE_URL);
-      xhr.onload = () => {
-        if (xhr.status === 200) { // Got a success response from server!
-          const json = JSON.parse(xhr.responseText);
-          callback(null, json);
-        } else { // Oops!. Got an error from server.
-          const error = (`Request failed. Returned status of ${xhr.status}`);
-          callback(error, null);
-        }
-      };
-      xhr.send();
-    } else {
-      console.log('data from idb');
-      IDBHelper.readAllIdbData(IDBHelper.dbPromise)
-        .then(restaurants => { return callback(null, restaurants) });
-    }
+    IDBHelper.readAllIdbData(IDBHelper.dbPromise)
+      .then(restaurants => { return callback(null, restaurants) });
   }
-
   /**
    * Fetch a restaurant by its ID.
    */
