@@ -128,11 +128,13 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (reviews = self.restaurant.reviews, id = self.restaurant.id) => {
+fillReviewsHTML = (reviews = self.restaurant.reviews, restaurant = self.restaurant) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
+
+  console.log('restaurant reviews.nil?', restaurant);
 
   if (!reviews) {
     const noReviews = document.createElement('p');

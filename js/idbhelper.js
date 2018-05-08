@@ -27,12 +27,31 @@ class IDBHelper {
   };
 
   static populateDatabase(dbPromise) {
-    fetch(DBHelper.DATABASE_URL).then(res => res.json())
+    fetch(DBHelper.DATABASE_URL)
+      .then(res => res.json())
       .then(json => {
-        json.map(restaurant => IDBHelper.insertEachTransaction(restaurant, dbPromise))
+        json.map(restaurant => IDBHelper.populateRestaurantsWithReviews(restaurant, dbPromise))
       });
   };
 
+  static populateRestaurantsWithReviews(restaurant, dbPromise) {
+    let id = restaurant.id;
+    fetch(`http://localhost:1337/reviews/?restaurant_id=${id}`)
+      .then(res => res.json())
+      .then(restoReviews => dbPromise.then(
+        db => {
+          const tx = db.transaction('restaurants', 'readwrite');
+          const store = tx.objectStore('restaurants');
+
+          let item = restaurant;
+          item.reviews = restoReviews;
+          store.put(item);
+          tx.complete;
+        })
+      )
+  }
+
+  // Populate restaurants data without reviews (used in P2 project)
   static insertEachTransaction(restaurant, dbPromise) {
     dbPromise.then(db => {
       let tx = db.transaction('restaurants', 'readwrite');
@@ -41,6 +60,7 @@ class IDBHelper {
       return tx.complete
     });
     console.log('item has been inserted');
+    IDBHelper.populateReviews(restaurant.id, dbPromise);
   }
 
   static readAllIdbData(dbPromise) {
