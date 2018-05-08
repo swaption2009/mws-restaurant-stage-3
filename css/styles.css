@@ -243,7 +243,6 @@ nav h1 a {
 }
 .inside #footer {
   bottom: 0;
-  position: fixed;
   width: 100%;
 }
 #restaurant-name {
@@ -287,16 +286,16 @@ nav h1 a {
   text-transform: uppercase;
 	width: 90%;
 }
-#restaurant-container, #reviews-container {
+#restaurant-container, #reviews-container, #review-form {
   border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #fff;
   display: flex;
   flex-direction: column;
 }
-#reviews-container {
+#reviews-container, #review-form {
   padding: 30px 40px 80px;
 }
-#reviews-container h2 {
+#reviews-container, #review-form h2 {
   color: #944000;
   font-size: 24pt;
   font-weight: 300;
@@ -331,4 +330,44 @@ nav h1 a {
 }
 #reviews-list li p:nth-child(3) {
   color: #944000;
+}
+/* ====================== Review Form Details ====================== */
+#review-form hr{
+  margin-top: -5px;
+}
+#review-form label{
+  display: block;
+  font-size: 16px;
+}
+#review-form input[type="text"]{
+  width: 100%;
+  margin-top: 10px;
+  margin-right: 10px;
+  height: 35px;
+  margin-bottom: 25px;
+  padding: 10px;
+  border: 1px solid #0275d8;
+}
+#review-form textarea{
+  width: 100%;
+  border: 1px solid #0275d8;
+  padding: 10px;
+  margin-bottom: 25px;
+  margin-top: 10px;
+  height: 100px;
+  resize: none;
+}
+#review-form input[type="submit"]{
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  width: 50%;
+  padding: 10px 45px;
+  background-color: #0275d8;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Ubuntu', sans-serif;
 }

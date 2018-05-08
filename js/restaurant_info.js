@@ -63,13 +63,11 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   image.alt = `showing photo of ${restaurant.name}`;
 
   // add JS responsive image using matchMedia addListener
-  const mq_tablet = window.matchMedia("(min-width: 450px)");
+  const mq_tablet = window.matchMedia('(min-width: 450px)');
   mq_tablet.addListener(mq => {
     if (mq.matches) {
-      console.log("above 450px");
       return image.src = (`/img/desktop/${restaurant.photograph}.jpg`);
     } else {
-      console.log('smaller than 450px')
       return image.src = (`/img/tablet/${restaurant.photograph}.jpg`);
     }
   });
@@ -83,6 +81,9 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   }
   // fill reviews
   fillReviewsHTML();
+
+  // show review form
+  buildReviewFormHTML();
 }
 
 /**
@@ -127,7 +128,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+fillReviewsHTML = (reviews = self.restaurant.reviews, id = self.restaurant.id) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
@@ -168,6 +169,79 @@ createReviewHTML = (review) => {
   li.appendChild(comments);
 
   return li;
+}
+
+/**
+ * Build review form
+ */
+buildReviewFormHTML = (id = self.restaurant.id) => {
+  const formContainer = document.getElementById('review-form');
+
+  const createform = document.createElement('form');
+  createform.setAttribute('onsubmit', `DBHelper.postReview(event, this);`);
+  // createform.setAttribute('method', 'post');
+
+
+  const heading = document.createElement('h2');
+  heading.innerHTML = 'Restaurant Review Form ';
+  createform.appendChild(heading);
+
+  const line = document.createElement('hr');
+  createform.appendChild(line);
+
+  const linebreak = document.createElement('br');
+  createform.appendChild(linebreak);
+
+  const hidden = document.createElement('input');
+  hidden.setAttribute('type', 'hidden');
+  hidden.setAttribute('name', 'id');
+  hidden.setAttribute('value', `${id}`);
+  createform.appendChild(hidden);
+
+  const namelabel = document.createElement('label');
+  namelabel.innerHTML = 'Name: ';
+  createform.appendChild(namelabel);
+
+  const inputelement = document.createElement('input');
+  inputelement.setAttribute('type', 'text');
+  inputelement.setAttribute('name', 'dname');
+  inputelement.setAttribute('placeholder', 'eg. James Bond');
+  createform.appendChild(inputelement);
+
+  createform.appendChild(linebreak);
+
+  const ratinglabel = document.createElement('label');
+  ratinglabel.innerHTML = 'Rating: ';
+  createform.appendChild(ratinglabel);
+
+  const ratingelement = document.createElement('input');
+  ratingelement.setAttribute('type', 'text');
+  ratingelement.setAttribute('name', 'drating');
+  ratingelement.setAttribute('placeholder', 'Please enter a number between 1 to 5');
+  createform.appendChild(ratingelement);
+
+  const ratingbreak = document.createElement('br');
+  createform.appendChild(ratingbreak);
+
+  const reviewlabel = document.createElement('label');
+  reviewlabel.innerHTML = 'Review: ';
+  createform.appendChild(reviewlabel);
+
+  const texareaelement = document.createElement('textarea');
+  texareaelement.setAttribute('name', 'dreview');
+  texareaelement.setAttribute('placeholder', 'Please write your review');
+  createform.appendChild(texareaelement);
+
+  const reviewbreak = document.createElement('br');
+  createform.appendChild(reviewbreak);
+
+  const submitelement = document.createElement('input');
+  submitelement.setAttribute('type', 'submit');
+  submitelement.setAttribute('name', 'dsubmit');
+  submitelement.setAttribute('value', 'Submit');
+  createform.appendChild(submitelement);
+
+  formContainer.appendChild(createform);
 }
 
 /**
