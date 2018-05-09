@@ -66,7 +66,6 @@ class IDBHelper {
         db => {
           const tx = db.transaction('restaurants', 'readwrite');
           const store = tx.objectStore('restaurants');
-
           let item = restaurant;
           item.reviews = restoReviews;
           store.put(item);
@@ -97,15 +96,30 @@ class IDBHelper {
     })
   }
   /**
-   * Read all data from idb restaurants index
+   * toggle and update favorite in idb by id
    */
-  static toggleIdbFavorite(id, condition) {
+  static idbToggleFavorite(id, condition) {
     IDBHelper.dbPromise.then(async db => {
       const tx = db.transaction('restaurants', 'readwrite');
       const store = tx.objectStore('restaurants');
-      const val = await store.get(id) || 0;
+      let val = await store.get(id) || 0;
       val.is_favorite = String(condition);
       store.put(val, id);
+      return tx.complete;
+    });
+  }
+  /**
+   * add new review in idb restaurant review
+   */
+  static idbPostReview(id, body) {
+    let key = parseInt(id);
+    IDBHelper.dbPromise.then(async db => {
+      const tx = db.transaction('restaurants', 'readwrite');
+      const store = tx.objectStore('restaurants');
+      let val = await store.get(key);
+      console.log('id', key, 'val', val);
+      val.reviews.push(body);
+      store.put(val, key);
       return tx.complete;
     });
   }

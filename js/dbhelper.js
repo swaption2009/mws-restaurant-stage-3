@@ -16,12 +16,13 @@ class DBHelper {
    */
   static postReview(event, form) {
     event.preventDefault();
+
     const body = {
       "restaurant_id": parseInt(form.id.value),
       "name": form.dname.value,
       "rating": parseInt(form.drating.value),
       "comments": form.dreview.value,
-    }
+    };
 
     fetch(`http://localhost:1337/reviews/`, {
       method: 'post',
@@ -30,8 +31,9 @@ class DBHelper {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body),
-    }).then(res => console.log('new review has been posted', res.json()))
-      .then(location.reload());
+    }).then(res => console.log('new review has been posted on the server', res.json()))
+      .then(IDBHelper.idbPostReview(form.id.value, body))
+      .then(location.reload())
   }
   /**
    * Add or Remove is_favorite on the server
@@ -39,7 +41,7 @@ class DBHelper {
   static toggleFavorite(id, condition) {
     fetch(`http://localhost:1337/restaurants/${id}/?is_favorite=${condition}`, { method: 'POST' })
       .then(res => console.log('restaurant favorite has been updated'))
-      .then(IDBHelper.toggleIdbFavorite(id, condition))
+      .then(IDBHelper.idbToggleFavorite(id, condition))
       .then(location.reload());
   }
   /**
