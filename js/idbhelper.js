@@ -96,4 +96,17 @@ class IDBHelper {
         .objectStore('restaurants').getAll();
     })
   }
+  /**
+   * Read all data from idb restaurants index
+   */
+  static toggleIdbFavorite(id, condition) {
+    IDBHelper.dbPromise.then(async db => {
+      const tx = db.transaction('restaurants', 'readwrite');
+      const store = tx.objectStore('restaurants');
+      const val = await store.get(id) || 0;
+      val.is_favorite = String(condition);
+      store.put(val, id);
+      return tx.complete;
+    });
+  }
 }

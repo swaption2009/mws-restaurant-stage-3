@@ -39,6 +39,7 @@ class DBHelper {
   static toggleFavorite(id, condition) {
     fetch(`http://localhost:1337/restaurants/${id}/?is_favorite=${condition}`, { method: 'POST' })
       .then(res => console.log('restaurant favorite has been updated'))
+      .then(IDBHelper.toggleIdbFavorite(id, condition))
       .then(location.reload());
   }
   /**
