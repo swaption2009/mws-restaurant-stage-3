@@ -1,3 +1,7 @@
+importScripts('/js/idb.js');
+importScripts('/js/idbhelper.js');
+importScripts('/js/dbhelper.js');
+
 let staticCacheName = 'restaurants-static-v3';
 
 self.addEventListener('install', event => {
@@ -78,6 +82,6 @@ self.addEventListener('fetch', event => {
 
 self.addEventListener('sync', function (event) {
   if (event.tag === 'review-sync') {
-    event.waitUntil(console.log('inside sw sync: ', event));
+    event.waitUntil(IDBHelper.fetchUnsyncedData());
   }
 });

@@ -184,7 +184,7 @@ buildReviewFormHTML = (id = self.restaurant.id) => {
 
   const createform = document.createElement('form');
   createform.setAttribute('id', 'restoForm');
-  createform.setAttribute('onsubmit', `DBHelper.postReview(event, this);`);
+  createform.setAttribute('onsubmit', `DBHelper.saveOfflineReview(event, this);`);
 
   const heading = document.createElement('h2');
   heading.innerHTML = 'Restaurant Review Form ';
@@ -208,6 +208,12 @@ buildReviewFormHTML = (id = self.restaurant.id) => {
   hiddenReviewDate.setAttribute('name', 'ddate');
   hiddenReviewDate.setAttribute('value', `${unixTime}`);
   createform.appendChild(hiddenReviewDate);
+
+  const hiddenFlag = document.createElement('input');
+  hiddenFlag.setAttribute('type', 'hidden');
+  hiddenFlag.setAttribute('name', 'dflag');
+  hiddenFlag.setAttribute('value', 'unsynced');
+  createform.appendChild(hiddenFlag);
 
   const namelabel = document.createElement('label');
   namelabel.innerHTML = 'Name: ';

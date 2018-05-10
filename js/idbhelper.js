@@ -122,4 +122,42 @@ class IDBHelper {
       return tx.complete;
     });
   }
+  /**
+   * Fetch unsynced data
+   */
+  static fetchUnsyncedData() {
+    IDBHelper.readAllIdbData(IDBHelper.dbPromise)
+      .then(data => {
+        // console.log(data);
+        let unsychedReviews = [];
+        data.forEach(resto => {
+          resto.reviews.forEach(review => {
+            // console.log('each review', review)
+            if (review.flag) {
+              // console.log('unsyced before', unsychedReviews);
+              // console.log('review with unsynced flag', review);
+              unsychedReviews.push(review);
+            }
+          })
+        });
+        // console.log('unsyced after', unsychedReviews);
+        unsychedReviews.forEach(resto => {
+          const body = {
+            "restaurant_id": resto.restaurant_id,
+            "name": resto.name,
+            "rating": resto.rating,
+            "comments": resto.comments,
+            "updatedAt": resto.updatedAt,
+          };
+          fetch(`http://localhost:1337/reviews/`, {
+            method: 'post',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body),
+          }).then(res => console.log('new review has been synced to the server', res.json()))
+        })
+      });
+  }
 }

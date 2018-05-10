@@ -11,40 +11,6 @@ class DBHelper {
     return `http://localhost:${port}/restaurants`;
   }
   /**
-   * Add or Remove is_favorite on the server
-   */
-  static postReview(event, form) {
-    event.preventDefault();
-
-    const body = {
-      "restaurant_id": parseInt(form.id.value),
-      "name": form.dname.value,
-      "rating": parseInt(form.drating.value),
-      "comments": form.dreview.value,
-      "updatedAt": parseInt(form.ddate.value),
-    };
-
-    fetch(`http://localhost:1337/reviews/`, {
-      method: 'post',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body),
-    }).then(res => console.log('new review has been posted on the server', res.json()))
-      .then(IDBHelper.idbPostReview(form.id.value, body))
-      // .then(location.reload())
-  }
-  /**
-   * Add or Remove is_favorite on the server
-   */
-  static toggleFavorite(id, condition) {
-    fetch(`http://localhost:1337/restaurants/${id}/?is_favorite=${condition}`, { method: 'POST' })
-      .then(res => console.log('restaurant favorite has been updated'))
-      .then(IDBHelper.idbToggleFavorite(id, condition))
-      .then(location.reload());
-  }
-  /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
@@ -201,5 +167,49 @@ class DBHelper {
       animation: google.maps.Animation.DROP}
     );
     return marker;
+  }
+  /**
+   * Add or Remove is_favorite on the server
+   */
+  static toggleFavorite(id, condition) {
+    fetch(`http://localhost:1337/restaurants/${id}/?is_favorite=${condition}`, { method: 'POST' })
+      .then(res => console.log('restaurant favorite has been updated'))
+      .then(IDBHelper.idbToggleFavorite(id, condition))
+      .then(location.reload());
+  }
+  /**
+   * Add or Remove is_favorite on the server
+   */
+  static saveOfflineReview(event, form) {
+    event.preventDefault();
+    const body = {
+      "restaurant_id": parseInt(form.id.value),
+      "name": form.dname.value,
+      "rating": parseInt(form.drating.value),
+      "comments": form.dreview.value,
+      "updatedAt": parseInt(form.ddate.value),
+      "flag": form.dflag.value,
+    };
+    IDBHelper.idbPostReview(form.id.value, body);
+    location.reload();
+
+    // Change workflow for offline mode: store to idb and wait to sync
+    // fetch(`http://localhost:1337/reviews/`, {
+    //   method: 'post',
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(body),
+    // }).then(res => console.log('new review has been posted on the server', res.json()))
+    //   .then(IDBHelper.idbPostReview(form.id.value, body))
+    //   .then(location.reload())
+  }
+  /**
+   * Sync "unsynced" reviews in idb to the server when online
+   */
+  static syncOfflineReview() {
+    // console.log('hello online from syncOfflineReview')
+    IDBHelper.fetchUnsyncedData().then(res => console.log('res in dbhelper', res));
   }
 }
