@@ -82,6 +82,11 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
 /**
  * Initialize Google map, called from HTML.
  */
+
+/**
+* TODO window.onload to delay initMap.
+* See: https://stackoverflow.com/questions/2702362/loading-google-maps-api-after-the-page-is-displayed
+**/
 window.initMap = () => {
   let loc = {
     lat: 40.722216,
@@ -209,8 +214,8 @@ addMarkersToMap = (restaurants = self.restaurants) => {
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
     navigator.serviceWorker.register('sw.js', {scope: '/'})
-      .then(res => {
-        console.log('sw has been registered')
+      .then(reg => {
+        console.log('sw on main page has been registered')
       }).catch(err => {
       console.log('sw registration fails')
     });

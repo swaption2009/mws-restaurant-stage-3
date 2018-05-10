@@ -74,16 +74,17 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
-
   // fill operating hours
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
   }
   // fill reviews
   fillReviewsHTML();
-
   // show review form
   buildReviewFormHTML();
+  // register service worker
+  registerServiceWorker();
+
 }
 
 /**
@@ -182,6 +183,7 @@ buildReviewFormHTML = (id = self.restaurant.id) => {
   const formContainer = document.getElementById('review-form');
 
   const createform = document.createElement('form');
+  createform.setAttribute('id', 'restoForm');
   createform.setAttribute('onsubmit', `DBHelper.postReview(event, this);`);
 
   const heading = document.createElement('h2');
@@ -194,11 +196,18 @@ buildReviewFormHTML = (id = self.restaurant.id) => {
   const linebreak = document.createElement('br');
   createform.appendChild(linebreak);
 
-  const hidden = document.createElement('input');
-  hidden.setAttribute('type', 'hidden');
-  hidden.setAttribute('name', 'id');
-  hidden.setAttribute('value', `${id}`);
-  createform.appendChild(hidden);
+  const hiddenRestaurantId = document.createElement('input');
+  hiddenRestaurantId.setAttribute('type', 'hidden');
+  hiddenRestaurantId.setAttribute('name', 'id');
+  hiddenRestaurantId.setAttribute('value', `${id}`);
+  createform.appendChild(hiddenRestaurantId);
+
+  const hiddenReviewDate = document.createElement('input');
+  unixTime = Math.round(Date.now());
+  hiddenReviewDate.setAttribute('type', 'hidden');
+  hiddenReviewDate.setAttribute('name', 'ddate');
+  hiddenReviewDate.setAttribute('value', `${unixTime}`);
+  createform.appendChild(hiddenReviewDate);
 
   const namelabel = document.createElement('label');
   namelabel.innerHTML = 'Name: ';
@@ -208,6 +217,7 @@ buildReviewFormHTML = (id = self.restaurant.id) => {
   inputelement.setAttribute('type', 'text');
   inputelement.setAttribute('name', 'dname');
   inputelement.setAttribute('placeholder', 'eg. James Bond');
+  inputelement.setAttribute('aria-label', 'reviewer name');
   createform.appendChild(inputelement);
 
   createform.appendChild(linebreak);
@@ -220,6 +230,7 @@ buildReviewFormHTML = (id = self.restaurant.id) => {
   ratingelement.setAttribute('type', 'text');
   ratingelement.setAttribute('name', 'drating');
   ratingelement.setAttribute('placeholder', 'Please enter a number between 1 to 5');
+  ratingelement.setAttribute('aria-label', 'restaurant rating');
   createform.appendChild(ratingelement);
 
   const ratingbreak = document.createElement('br');
@@ -232,6 +243,7 @@ buildReviewFormHTML = (id = self.restaurant.id) => {
   const texareaelement = document.createElement('textarea');
   texareaelement.setAttribute('name', 'dreview');
   texareaelement.setAttribute('placeholder', 'Please write your review');
+  texareaelement.setAttribute('aria-label', 'restaurant review');
   createform.appendChild(texareaelement);
 
   const reviewbreak = document.createElement('br');
@@ -275,13 +287,13 @@ getParameterByName = (name, url) => {
 /**
  * Register service worker
  */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function () {
-    navigator.serviceWorker.register('sw.js', {scope: '/'})
-      .then(res => {
-        console.log('sw has been registered')
-      }).catch(err => {
-      console.log('sw registration fails')
-    });
-  });
+registerServiceWorker = () => {
+  navigator.serviceWorker.register('sw.js', {scope: '/'})
+    .then(reg => {
+      document.getElementById('restoForm').addEventListener('submit', () => {
+        reg.sync.register('review-sync')
+          .then(() => console.log('Review sync registered'));
+      })
+    })
+    .catch(err => console.log('sw registration fails'));
 }

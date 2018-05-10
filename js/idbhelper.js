@@ -117,7 +117,6 @@ class IDBHelper {
       const tx = db.transaction('restaurants', 'readwrite');
       const store = tx.objectStore('restaurants');
       let val = await store.get(key);
-      console.log('id', key, 'val', val);
       val.reviews.push(body);
       store.put(val, key);
       return tx.complete;

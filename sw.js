@@ -1,4 +1,4 @@
-let staticCacheName = 'restaurants-static-v2';
+let staticCacheName = 'restaurants-static-v3';
 
 self.addEventListener('install', event => {
   let UrlsToCache = [
@@ -74,4 +74,10 @@ self.addEventListener('fetch', event => {
       return fetch(event.request);
     })
   )
+});
+
+self.addEventListener('sync', function (event) {
+  if (event.tag === 'review-sync') {
+    event.waitUntil(console.log('inside sw sync: ', event));
+  }
 });

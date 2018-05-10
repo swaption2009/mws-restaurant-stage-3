@@ -2,7 +2,6 @@
  * Common database helper functions.
  */
 class DBHelper {
-
   /**
    * Database URL.
    * Change this to restaurants.json file location on your server.
@@ -22,6 +21,7 @@ class DBHelper {
       "name": form.dname.value,
       "rating": parseInt(form.drating.value),
       "comments": form.dreview.value,
+      "updatedAt": parseInt(form.ddate.value),
     };
 
     fetch(`http://localhost:1337/reviews/`, {
@@ -33,7 +33,7 @@ class DBHelper {
       body: JSON.stringify(body),
     }).then(res => console.log('new review has been posted on the server', res.json()))
       .then(IDBHelper.idbPostReview(form.id.value, body))
-      .then(location.reload())
+      // .then(location.reload())
   }
   /**
    * Add or Remove is_favorite on the server
@@ -202,5 +202,4 @@ class DBHelper {
     );
     return marker;
   }
-
 }
