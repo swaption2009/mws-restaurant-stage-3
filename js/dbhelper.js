@@ -147,11 +147,11 @@ class DBHelper {
     const mq_desktop = window.matchMedia("(min-width: 800px)");
 
     if (mq_desktop.matches) {
-      return (`/img/desktop/${restaurant.photograph}.jpg`);
+      return (`/img/desktop/${restaurant.photograph}.webp`);
     } else if (mq_tablet.matches) {
-      return (`/img/tablet/${restaurant.photograph}.jpg`);
+      return (`/img/tablet/${restaurant.photograph}.webp`);
     } else {
-      return (`/img/mobile/${restaurant.photograph}.jpg`);
+      return (`/img/mobile/${restaurant.photograph}.webp`);
     }
   }
 
