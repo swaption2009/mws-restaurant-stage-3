@@ -125,22 +125,18 @@ class IDBHelper {
   /**
    * Fetch unsynced data
    */
-  static fetchUnsyncedData() {
+  static syncOfflineReviews() {
     IDBHelper.readAllIdbData(IDBHelper.dbPromise)
       .then(data => {
-        // console.log(data);
         let unsychedReviews = [];
         data.forEach(resto => {
           resto.reviews.forEach(review => {
-            // console.log('each review', review)
             if (review.flag) {
-              // console.log('unsyced before', unsychedReviews);
-              // console.log('review with unsynced flag', review);
               unsychedReviews.push(review);
+              delete review.flag;
             }
           })
         });
-        // console.log('unsyced after', unsychedReviews);
         unsychedReviews.forEach(resto => {
           const body = {
             "restaurant_id": resto.restaurant_id,

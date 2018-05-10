@@ -192,24 +192,5 @@ class DBHelper {
     };
     IDBHelper.idbPostReview(form.id.value, body);
     location.reload();
-
-    // Change workflow for offline mode: store to idb and wait to sync
-    // fetch(`http://localhost:1337/reviews/`, {
-    //   method: 'post',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(body),
-    // }).then(res => console.log('new review has been posted on the server', res.json()))
-    //   .then(IDBHelper.idbPostReview(form.id.value, body))
-    //   .then(location.reload())
-  }
-  /**
-   * Sync "unsynced" reviews in idb to the server when online
-   */
-  static syncOfflineReview() {
-    // console.log('hello online from syncOfflineReview')
-    IDBHelper.fetchUnsyncedData().then(res => console.log('res in dbhelper', res));
   }
 }
